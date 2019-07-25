@@ -40,7 +40,7 @@ is_up()
 {
 
    # Return False if any Instances show down
-   if [ "`sudo ccontrol list |grep down`" ]
+   if [ "`sudo ccontrol list |grep down,`" ]
    then
       return 1
    else
