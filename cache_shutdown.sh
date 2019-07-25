@@ -40,7 +40,7 @@ is_down()
 {
 
    # Return False if any Instances show Up, Alert, or Warn
-   if [ "`sudo ccontrol list |egrep -i \"up|warn|alert\"`" ]
+   if [ "`sudo ccontrol list |grep running,`" ]
    then
       return 1
    else
