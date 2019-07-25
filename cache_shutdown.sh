@@ -61,7 +61,7 @@ main()
       sudo su - root -c "logger 'cache_shutdown.sh: Instances stopped successfully at script runtime'"
       return 0   
    else
-      sudo su - root -c "logger 'cache_startup.sh: There was an error stopping, not all instances are showing down'"
+      sudo su - root -c "logger 'cache_shutdown.sh: There was an error stopping, not all instances are showing down'"
       return 1
    fi
 
