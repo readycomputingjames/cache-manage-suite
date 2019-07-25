@@ -31,7 +31,7 @@ stop_instances()
 
    for i in ${instances[@]};
    do
-      sudo ccontrol stop $i > /dev/null 2>&1
+      sudo ccontrol stop $i quietly > /dev/null 2>&1
    done
 
 }
