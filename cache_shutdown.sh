@@ -39,7 +39,7 @@ stop_instances()
 is_down()
 {
 
-   # Return False if any Instances show Up, Alert, or Warn
+   # Return False if any Instances show Running
    if [ "`sudo ccontrol list |grep running,`" ]
    then
       return 1
