@@ -60,13 +60,14 @@ main()
    # Verify
    if is_up;
    then
-      sudo echo "cache_startup.sh: Instances started successfully at boot time" >> /var/log/messages
+      sudo su - root -c "echo 'cache_startup.sh: Instances started successfully at boot time' >> /var/log/messages"
       return 0   
    else
-      sudo echo "cache_startup.sh: There was an error starting up instances at boot time" >> /var/log/messages
+      sudo su - root -c "echo 'cache_startup.sh: There was an error starting up instances at boot time' >> /var/log/messages"
       return 1
    fi
 
 }
 
 main
+
