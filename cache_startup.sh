@@ -19,6 +19,7 @@
 #
 ### CHANGE LOG ###
 #
+# 20190725 = Changed log entry in main() from echo to logger
 #
 #########################################################################
 
@@ -60,10 +61,10 @@ main()
    # Verify
    if is_up;
    then
-      sudo su - root -c "echo 'cache_startup.sh: Instances started successfully at boot time' >> /var/log/messages"
+      sudo su - root -c "logger 'cache_startup.sh: Instances started successfully at boot time'"
       return 0   
    else
-      sudo su - root -c "echo 'cache_startup.sh: There was an error starting up instances at boot time' >> /var/log/messages"
+      sudo su - root -c "logger 'cache_startup.sh: There was an error starting up instances at boot time'"
       return 1
    fi
 
