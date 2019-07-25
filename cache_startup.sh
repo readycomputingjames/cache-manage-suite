@@ -41,25 +41,30 @@ start_instances()
 is_up()
 {
 
-   # Load Instances into an Array, in case we have Multiple
-   instances=()
-   while IFS= read -r line; do
-      instances+=( "$line" )
-   done < <( sudo ccontrol list |grep Configuration |awk '{ print $2 }' |tr -d "'" )
-
-   for i in ${instances[@]};
-   do
-      
-   done
+   # Return False if any Instances are Down
+   if [ "`sudo ccontrol list |grep down`" ]
+   then
+      return 1
+   else
+      return 0
+   fi
 
 }
 
 main()
 {
 
-
+   # Start Instances
+   start_instances
+   
+   # Verify
+   if is_up;
+   then
+      sudo echo "cache_startup.sh: Instances started successfully at boot time" >> /var/log/messages
+      return 0   
+   else
+      sudo echo "cache_startup.sh: There was an error starting up instances at boot time" >> /var/log/messages
+      return 1
+   fi
 
 }
-
-
-
