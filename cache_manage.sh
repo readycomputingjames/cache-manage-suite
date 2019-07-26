@@ -35,7 +35,7 @@ help()
    echo "Usage:"
    echo "./cache_manage.sh <start|stop|restart|status|help>"
    echo ""
-   echo "Examples:
+   echo "Examples:"
    echo "./cache_manage.sh start"
    echo "./cache_manage.sh status"
    echo ""
