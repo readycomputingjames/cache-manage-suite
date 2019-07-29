@@ -20,6 +20,7 @@
 #
 #
 ### CHANGE LOG ###
+# 20190729 = Added Auth-Enabled Flag
 #
 #
 #########################################################################
@@ -74,6 +75,41 @@ add_user()
    fi
 
 }
+
+auth_enabled()
+{
+
+   ### Print Out Enabled Authentication Settings for Instances ###
+   
+   # %SYS>w ##class(Security.System).AutheEnabledGetStored("SYSTEM")
+   # Function Code Goes Here
+   
+   echo ""
+   echo "--------------------"
+   echo "Authentication Bits:"
+   echo "--------------------"
+   echo "Bit 0 = AutheK5CCache"
+   echo "Bit 1 = AutheK5Prompt"
+   echo "Bit 2 = AutheK5API"
+   echo "Bit 3 = AutheK5KeyTab"
+   echo "Bit 4 = AutheOS"
+   echo "Bit 5 - AutheCache"
+   echo "Bit 6 = AutheUnauthenticated"
+   echo "Bit 7 = AutheKB"
+   echo "Bit 8 = AutheKBEncryption"
+   echo "Bit 9 = AutheKBIntegrity"
+   echo "Bit 10 = AutheSystem"
+   echo "Bit 11 = AutheLDAP"
+   echo "Bit 12 = AutheLDAPCache"
+   echo "Bit 13 = AutheDelegated"
+   echo "Bit 14 = LoginToken"
+   echo "Bit 15-19 reserved"
+   echo "Bit 20 = TwoFactorSMS"
+   echo "Bit 21 = TwoFactorPW"
+   echo ""
+
+}
+
 
 cache_user_exists()
 {
@@ -134,6 +170,7 @@ help_text()
    echo ""
    echo "Commands:"
    echo "--add-user <username> <role> = Add an OS user account to Cache"
+   echo "--auth-enabled = Print out authentication settings for instance(s)"
    echo "--del-user <username> = Delete an OS user account from Cache"
    echo "--help = Show help notes for this script"
    echo "--license = Show license usage and info"
@@ -372,6 +409,9 @@ main ()
       case $INPUT_COMMAND1 in
          --add-user)
             echo "Add User Goes Here"
+            ;;
+         --auth-enabled)
+            auth_enabled
             ;;
          --del-user)
             echo "Del User Goes Here"
