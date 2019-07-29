@@ -24,6 +24,8 @@
 #
 #########################################################################
 
+VERSION="1.00"
+
 INPUT_COMMAND1=$1
 INPUT_COMMAND2=$2
 INPUT_COMMAND3=$3
@@ -134,12 +136,14 @@ help_text()
    echo "--add-user <username> <role> = Add an OS user account to Cache"
    echo "--del-user <username> = Delete an OS user account from Cache"
    echo "--help = Show help notes for this script"
+   echo "--license = Show license usage and info"
    echo "--restart = Restart all instances on this machine"
    echo "--show-log = Show log warnings and errors"
    echo "--start = Start all instances on this machine"
    echo "--status = Show status of all instances on this machine"
    echo "--stop = Stop all instances on this machine"
    echo "--user-exists = Show if OS user account exists in Cache"
+   echo "--version = Print out script version"
    echo ""
    echo "Examples:"
    echo "./cache_manage.sh --start"
@@ -188,6 +192,26 @@ is_up()
    else
       return 0
    fi
+
+}
+
+license_usage()
+{
+
+   # Load Instances into an Array, in case we have Multiple
+   instances=()
+   while IFS= read -r line; do
+      instances+=( "$line" )
+   done < <( sudo ccontrol list |grep Configuration |awk '{ print $2 }' |tr -d "'" )
+
+   for i in ${instances[@]};
+   do
+      echo ""
+      echo "License Usage for $i:"
+      echo ""
+      sudo csession $i "##class(%SYSTEM.License).ShowSummary()"
+      echo ""
+   done
 
 }
 
@@ -355,6 +379,9 @@ main ()
          --help)
             help_text
          ;;
+         --license)
+            license_usage
+         ;;
          --restart)
             echo ""
             echo "Restarting Instances Now"
@@ -387,7 +414,13 @@ main ()
          --user-exists)
             cache_user_exists
          ;;
+         --version)
+            echo ""
+            echo "Script Version = $VERSION"
+            echo ""
+         ;;
          *)
+            echo ""
             echo "$INPUT_COMMAND1 = Not Valid Input"
             echo ""
       esac
