@@ -5,7 +5,7 @@
 # Ready Computing
 #
 # Main Bash script for Cache Manage Suite of Scripts
-# This is a combo of Startup, Shutdown, and Restart
+# This is a combo of Basic Functions and Tasks
 #
 # We will already assume that Cache is installed on these Systems for now
 #
@@ -13,6 +13,7 @@
 #
 # Usage = cache_manage.sh <command>
 #
+# Ex: ./cache_manage.sh --help
 # Ex: ./cache_manage.sh --start
 # Ex: ./cache_manage.sh --status
 #
