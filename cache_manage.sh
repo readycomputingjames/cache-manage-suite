@@ -104,7 +104,10 @@ auth_enabled()
 
    for i in ${instances[@]};
    do
-      echo -e "w ##class(Security.System).AutheEnabledGetStored(\"SYSTEM\")\nh" |/usr/bin/csession $i -U %SYS
+      echo ""
+      echo "Printing Enabled Authentication for $i"
+      echo ""
+      echo -e "w ##class(Security.System).AutheEnabledGetStored(\"SYSTEM\")\nh" |/usr/bin/csession $i -U %SYS |awk NR==5
    done
 
    echo ""
