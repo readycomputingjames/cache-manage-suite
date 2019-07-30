@@ -41,12 +41,21 @@ add_user()
 
    if [ -z "$INPUT_COMMAND3" ]
    then
+      echo ""
       echo "No User Role Input - Please Run Again with a Role Specified"
       echo ""
 
    else
-      if os_user_exists && cache_user_exists;
+      if os_user_exists;
       then
+
+         echo ""
+         echo "--------------------"
+         echo "Running Add-User for $INPUT_COMMAND2"
+         echo ""
+         echo "If the User Already Exists, it will be Skipped..."
+         echo "--------------------"
+         echo ""
 
          # Load Instances into an Array, in case we have Multiple
          instances=()
@@ -56,21 +65,22 @@ add_user()
 
          for i in ${instances[@]};
          do
-            "echo -e 's x=##Class(Security.Users).Create(\"$INPUT_COMMAND2\",\"$INPUT_COMMAND3\",\"CHANGEPASSWORDHERE\",\"$INPUT_COMMAND2\",\"%SYS\")\nh' |/usr/bin/csession $i -U %SYS > /dev/null 2>&1"
+
+            output=`echo -e "w ##class(Security.Users).Exists(\"$INPUT_COMMAND2\")\nh" |/usr/bin/csession $i -U %SYS |awk NR==5`
+
+         if [ $output -eq 0 ]
+         then
+            echo -e "s x=##Class(Security.Users).Create(\"$INPUT_COMMAND2\",\"$INPUT_COMMAND3\",\"CHANGEPASSWORDHERE\",\"$INPUT_COMMAND2\",\"%SYS\")\nh" |/usr/bin/csession $i -U %SYS > /dev/null 2>&1
+         else
+            echo "Username $INPUT_COMMAND2 Already Exists in $i"
+         fi
+
          done
 
-         echo "Checking if Add was Successful..."
          echo ""
+         echo "Checking for Username in Cache..."
 
-         if ! cache_user_exists;
-            then
-               echo "User added Successfully"
-               echo ""
-            else
-               echo "User was not added Successfully, please check manually"
-               echo ""
-               return 1
-         fi
+         cache_user_exists
 
       else
          echo "Requirements are not met to add new User, nothing to do..."
@@ -85,18 +95,18 @@ auth_enabled()
 {
 
    ### Print Out Enabled Authentication Settings for Instances ###
-   
+
    # Load Instances into an Array, in case we have Multiple
    instances=()
    while IFS= read -r line; do
       instances+=( "$line" )
    done < <( /usr/bin/ccontrol list |grep Configuration |awk '{ print $2 }' |tr -d "'" )
-   
+
    for i in ${instances[@]};
    do
       echo -e "w ##class(Security.System).AutheEnabledGetStored(\"SYSTEM\")\nh" |/usr/bin/csession $i -U %SYS
    done
-   
+
    echo ""
    echo "--------------------"
    echo "Authentication Bits:"
@@ -144,20 +154,19 @@ cache_user_exists()
 
       for i in ${instances[@]};
       do
-         output=`"echo -e 'w ##class(Security.Users).Exists(\"$INPUT_COMMAND2\")\nh' |/usr/bin/csession $i -U %SYS |awk NR==5"`
+         output=`echo -e "w ##class(Security.Users).Exists(\"$INPUT_COMMAND2\")\nh" |/usr/bin/csession $i -U %SYS |awk NR==5`
+
          if [ $output -eq  1 ]
          then
             echo ""
-            echo "User Exists in Cache"
-            echo ""
-            return 1
+            echo "User $INPUT_COMMAND2 Exists in Cache for $i"
          else
             echo ""
-            echo "User Does not Exist in Cache"
-            echo ""
-            return 0
+            echo "User $INPUT_COMMAND2 Does not Exist in Cache for $i"
          fi
       done
+
+      echo ""
 
    fi
 
@@ -257,9 +266,11 @@ license_usage()
    for i in ${instances[@]};
    do
       echo ""
+      echo "------------------------------"
       echo "License Usage for $i:"
       echo ""
       /usr/bin/csession $i "##class(%SYSTEM.License).ShowSummary()"
+      echo ""
       echo ""
    done
 
@@ -272,6 +283,7 @@ os_user_exists()
 
    if [ -z "$INPUT_COMMAND2" ]
    then
+      echo ""
       echo "No User ID Input - Please Run Again with a User ID"
       echo ""
 
@@ -280,6 +292,7 @@ os_user_exists()
       then
          return 0
       else
+         echo ""
          echo "User does not exist in the OS, exiting..."
          echo ""
          return 1
@@ -421,7 +434,7 @@ main ()
       # Parse out CLI Argument to see what we Need to do
       case $INPUT_COMMAND1 in
          --add-user)
-            echo "Add User Goes Here"
+            add_user
             ;;
          --auth-enabled)
             auth_enabled
@@ -488,4 +501,5 @@ main ()
 }
 
 main
+
 
