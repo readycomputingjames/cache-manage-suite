@@ -11,15 +11,15 @@ Demo Notes for Cache-Manage Script Usage
 
 Testing on a System without Cache:
 
-[jhipp@test-sbox1 ~]$ ./cache_manage.sh
+[jhipp@test-sbox0 ~]$ ./cache_manage.sh
 
 Cache is not Installed, ... Exiting
 
-[jhipp@test-sbox1 ~]$ ./cache_manage.sh --help
+[jhipp@test-sbox0 ~]$ ./cache_manage.sh --help
 
 Cache is not Installed, ... Exiting
 
-[jhipp@test-sbox1 ~]$ /usr/bin/ccontrol list
+[jhipp@test-sbox0 ~]$ /usr/bin/ccontrol list
 -bash: /usr/bin/ccontrol: No such file or directory
 
 
@@ -27,10 +27,10 @@ Cache is not Installed, ... Exiting
 
 Testing on a System with one Cache Instance:
 
-[jhipp@test-sbox2 ~]$ which ccontrol
+[jhipp@test-sbox1 ~]$ which ccontrol
 /usr/bin/ccontrol
 
-[jhipp@test-sbox2 ~]$ ccontrol list
+[jhipp@test-sbox1 ~]$ ccontrol list
 
 Configuration 'TEST001'   (default)
         directory: /intersystems/TEST001/
@@ -39,11 +39,11 @@ Configuration 'TEST001'   (default)
         status:    running, since Tue Jul 30 12:55:18 2019
         state:     ok
 
-[jhipp@test-sbox2 ~]$ ./cache_manage.sh
+[jhipp@test-sbox1 ~]$ ./cache_manage.sh
 
  = Not Valid Input
 
-[jhipp@test-sbox2 ~]$ ./cache_manage.sh --help
+[jhipp@test-sbox1 ~]$ ./cache_manage.sh --help
 ----------------------
 cache_manage.sh
 ----------------------
@@ -70,7 +70,7 @@ Examples:
 ./cache_manage.sh --status
 ./cache_manage.sh --add-user jdoe %All
 
-[jhipp@test-sbox2 ~]$ ./cache_manage.sh --auth-enabled
+[jhipp@test-sbox1 ~]$ ./cache_manage.sh --auth-enabled
 
 Printing Enabled Authentication for TEST001
 
@@ -98,19 +98,19 @@ Bit 15-19 reserved
 Bit 20 = TwoFactorSMS
 Bit 21 = TwoFactorPW
 
-[jhipp@test-sbox2 ~]$ ./cache_manage.sh --user-exists
+[jhipp@test-sbox1 ~]$ ./cache_manage.sh --user-exists
 
 No User ID Input - Please Run Again with a User ID
 
-[jhipp@test-sbox2 ~]$ ./cache_manage.sh --user-exists jenkins
+[jhipp@test-sbox1 ~]$ ./cache_manage.sh --user-exists jenkins
 
-User jenkins Does not Exist in Cache for VAHC001
+User jenkins Does not Exist in Cache for TEST001
 
-[jhipp@test-sbox2 ~]$ ./cache_manage.sh --add-user jenkins
+[jhipp@test-sbox1 ~]$ ./cache_manage.sh --add-user jenkins
 
 No User Role Input - Please Run Again with a Role Specified
 
-[jhipp@test-sbox2 ~]$ ./cache_manage.sh --add-user jenkins %All
+[jhipp@test-sbox1 ~]$ ./cache_manage.sh --add-user jenkins %All
 
 --------------------
 Running Add-User for jenkins
@@ -121,9 +121,9 @@ If the User Already Exists, it will be Skipped...
 
 Verifying Usernames in Cache...
 
-User jenkins Exists in Cache for VAHC001
+User jenkins Exists in Cache for TEST001
 
-[jhipp@test-sbox2 ~]$ ./cache_manage.sh --del-user jenkins
+[jhipp@test-sbox1 ~]$ ./cache_manage.sh --del-user jenkins
 
 --------------------
 Running Delete-User for jenkins
@@ -133,18 +133,18 @@ If Username is not in Cache, it will be Skipped...
 
 Verifying Updated Usernames in Cache...
 
-User jenkins Does not Exist in Cache for VAHC001
+User jenkins Does not Exist in Cache for TEST001
 
-[jhipp@test-sbox2 ~]$ ./cache_manage.sh --user-exists jenkins
+[jhipp@test-sbox1 ~]$ ./cache_manage.sh --user-exists jenkins
 
-User jenkins Does not Exist in Cache for VAHC001
+User jenkins Does not Exist in Cache for TEST001
 
 
 ####################
 
 Testing on a System with more than One Instance:
 
-[jhipp@test-sbox3 ~]$ ccontrol list
+[jhipp@test-sbox2 ~]$ ccontrol list
 
 Configuration 'TEST002'   (default)
         directory: /intersystems/TEST002/sys
@@ -160,7 +160,7 @@ Configuration 'TEST003'
         status:    running, since Sat Jul 27 22:50:27 2019
         state:     ok
 
-[jhipp@test-sbox3 ~]$ ./cache_manage.sh --license
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh --license
 
 ------------------------------
 License Usage for TEST002:
@@ -193,13 +193,13 @@ License Units   Authorized =      200
 Current Connections =      0  Maximum Connections =      1
 Current Users       =      1  Maximum Users       =      2
 
-[jhipp@test-sbox3 ~]$ ./cache_manage.sh --stop
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh --stop
 
 Stopping Instances Now
 
 All instances stopped successfully
 
-[jhipp@test-sbox3 ~]$ ./cache_manage.sh --status
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh --status
 
 --------------------
 Status of Instances
@@ -217,13 +217,13 @@ Configuration 'TEST003'
         conf file: cache.cpf  (SuperServer port = 1973, WebServer = 57773)
         status:    down, last used Tue Jul 30 16:46:19 2019
 
-[jhipp@test-sbox3 ~]$ ./cache_manage.sh --start
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh --start
 
 Starting Instances Now
 
 Instances started successfully
 
-[jhipp@test-sbox3 ~]$ ./cache_manage.sh --status
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh --status
 
 --------------------
 Status of Instances
@@ -243,7 +243,7 @@ Configuration 'TEST003'
         status:    running, since Tue Jul 30 16:46:30 2019
         state:     ok
 
-[jhipp@test-sbox3 ~]$ ./cache_manage.sh --show-log
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh --show-log
 
 Parsing out cconsole.log for Severity Messages Greater Than 1
 
@@ -293,7 +293,7 @@ Log Messages for TEST003
 07/30/19-02:03:44:394 (29774) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 99, 99, 90 (Max value is 85).
 07/30/19-16:46:31:032 (15417) 2 Database /intersystems/TEST003/db/data/ is locked from gov-tic-testqa-hsrm
 
-[jhipp@test-sbox3 ~]$ ./cache_manage.sh --version
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh --version
 
 Script Version = 1.00
 
