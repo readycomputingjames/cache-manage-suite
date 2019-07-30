@@ -189,16 +189,16 @@ del_user()
       echo "If Username is not in Cache, it will be Skipped..."
       echo "--------------------"
       echo ""
-      
+
       # Load Instances into an Array, in case we have Multiple
       instances=()
       while IFS= read -r line; do
          instances+=( "$line" )
       done < <( /usr/bin/ccontrol list |grep Configuration |awk '{ print $2 }' |tr -d "'" )
-   
+
       for i in ${instances[@]};
       do
-      
+
          output=`echo -e "w ##class(Security.Users).Exists(\"$INPUT_COMMAND2\")\nh" |/usr/bin/csession $i -U %SYS |awk NR==5`
 
          if [ $output -eq 1 ]
@@ -209,7 +209,7 @@ del_user()
          fi
 
          done
-         
+
          echo ""
          echo "Checking for Username in Cache..."
 
@@ -372,7 +372,27 @@ restart_instances()
 show_log()
 {
 
-   echo "placeholder"
+   echo ""
+   echo "Parsing out cconsole.log for Severity Messages Greater Than 1"
+   echo ""
+
+   # Load Instances into an Array, in case we have Multiple
+   instances=()
+   while IFS= read -r line; do
+      instances+=( "$line" )
+   done < <( /usr/bin/ccontrol list |grep Configuration |awk '{ print $2 }' |tr -d "'" )
+
+   for i in ${instances[@]};
+   do
+      echo "Log Messages for $i"
+      echo ""
+
+      local_installdir=`/usr/bin/ccontrol list $i |grep directory |awk '{ print $2 }'`
+      log_file=$local_installdir/mgr/cconsole.log
+
+      cat $log_file |egrep -i "\) 2 | \( 3" |tail -n 20
+      echo ""
+   done
 
 }
 
@@ -541,5 +561,4 @@ main ()
 }
 
 main
-
 
