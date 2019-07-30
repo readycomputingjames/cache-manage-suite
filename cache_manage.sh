@@ -4,7 +4,7 @@
 # System Support Engineer
 # Ready Computing
 #
-# Main Bash script for Cache Manage Suite of Scripts
+# Main Bash script for Cache Manage Script Suite
 # This is a combo of Basic Functions and Tasks
 #
 # This script assumes that the user running the script has OS
