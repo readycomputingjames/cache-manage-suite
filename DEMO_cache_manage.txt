@@ -6,12 +6,294 @@ Ready Computing
 
 Demo Notes for Cache-Manage Script Usage
 
------------------------------------------
+####################
+
+Testing on a System without Cache:
+
+[jhipp@test-sbox1 ~]$ ./cache_manage.sh
+
+Cache is not Installed, ... Exiting
+
+[jhipp@test-sbox1 ~]$ ./cache_manage.sh --help
+
+Cache is not Installed, ... Exiting
+
+[jhipp@test-sbox1 ~]$ /usr/bin/ccontrol list
+-bash: /usr/bin/ccontrol: No such file or directory
 
 
+####################
+
+Testing on a System with one Cache Instance:
+
+[jhipp@test-sbox2 ~]$ which ccontrol
+/usr/bin/ccontrol
+
+[jhipp@test-sbox2 ~]$ ccontrol list
+
+Configuration 'TEST001'   (default)
+        directory: /intersystems/TEST001/
+        versionid: 2017.2.1.801.3.18466
+        conf file: cache.cpf  (SuperServer port = 1972, WebServer = 58772)
+        status:    running, since Tue Jul 30 12:55:18 2019
+        state:     ok
+
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh
+
+ = Not Valid Input
+
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh --help
+----------------------
+cache_manage.sh
+----------------------
+
+Usage:
+./cache_manage.sh <command(s)>, ...
+
+Commands:
+--add-user <username> <role> = Add an OS user account to Cache
+--auth-enabled = Print out authentication settings for instance(s)
+--del-user <username> = Delete an OS user account from Cache
+--help = Show help notes for this script
+--license = Show license usage and info
+--restart = Restart all instances on this machine
+--show-log = Show log warnings and errors
+--start = Start all instances on this machine
+--status = Show status of all instances on this machine
+--stop = Stop all instances on this machine
+--user-exists = Show if OS user account exists in Cache
+--version = Print out script version
+
+Examples:
+./cache_manage.sh --start
+./cache_manage.sh --status
+./cache_manage.sh --add-user jdoe %All
+
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh --auth-enabled
+
+Printing Enabled Authentication for VAHC001
+
+10239
+
+--------------------
+Authentication Bits:
+--------------------
+Bit 0 = AutheK5CCache
+Bit 1 = AutheK5Prompt
+Bit 2 = AutheK5API
+Bit 3 = AutheK5KeyTab
+Bit 4 = AutheOS
+Bit 5 - AutheCache
+Bit 6 = AutheUnauthenticated
+Bit 7 = AutheKB
+Bit 8 = AutheKBEncryption
+Bit 9 = AutheKBIntegrity
+Bit 10 = AutheSystem
+Bit 11 = AutheLDAP
+Bit 12 = AutheLDAPCache
+Bit 13 = AutheDelegated
+Bit 14 = LoginToken
+Bit 15-19 reserved
+Bit 20 = TwoFactorSMS
+Bit 21 = TwoFactorPW
+
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh --user-exists
+
+No User ID Input - Please Run Again with a User ID
+
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh --user-exists jenkins
+
+User jenkins Does not Exist in Cache for VAHC001
+
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh --add-user jenkins
+
+No User Role Input - Please Run Again with a Role Specified
+
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh --add-user jenkins %All
+
+--------------------
+Running Add-User for jenkins
+
+If the User Already Exists, it will be Skipped...
+--------------------
 
 
+Verifying Usernames in Cache...
+
+User jenkins Exists in Cache for VAHC001
+
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh --del-user jenkins
+
+--------------------
+Running Delete-User for jenkins
+
+If Username is not in Cache, it will be Skipped...
+--------------------
+
+Verifying Updated Usernames in Cache...
+
+User jenkins Does not Exist in Cache for VAHC001
+
+[jhipp@test-sbox2 ~]$ ./cache_manage.sh --user-exists jenkins
+
+User jenkins Does not Exist in Cache for VAHC001
 
 
+####################
+
+Testing on a System with more than One Instance:
+
+[jhipp@test-sbox3 ~]$ ccontrol list
+
+Configuration 'TEST002'   (default)
+        directory: /intersystems/TEST002/sys
+        versionid: 2017.2.1.801.3.18583
+        conf file: cache.cpf  (SuperServer port = 1972, WebServer = 57772)
+        status:    running, since Sat Jul 27 22:50:22 2019
+        state:     ok
+
+Configuration 'TEST003'
+        directory: /intersystems/TEST003/sys
+        versionid: 2017.2.1.801.3.18514
+        conf file: cache.cpf  (SuperServer port = 1973, WebServer = 57773)
+        status:    running, since Sat Jul 27 22:50:27 2019
+        state:     ok
+
+[jhipp@test-sbox3 ~]$ ./cache_manage.sh --license
+
+------------------------------
+License Usage for TEST002:
+
+
+License Server summary view of active key.
+
+     Distributed license use:
+Current License Units Used =        0
+Maximum License Units Used =        1
+License Units   Authorized =      200
+
+     Local license use:
+Current Connections =      0  Maximum Connections =      1
+Current Users       =      1  Maximum Users       =      2
+
+
+------------------------------
+License Usage for TEST003:
+
+
+License Server summary view of active key.
+
+     Distributed license use:
+Current License Units Used =        0
+Maximum License Units Used =        1
+License Units   Authorized =      200
+
+     Local license use:
+Current Connections =      0  Maximum Connections =      1
+Current Users       =      1  Maximum Users       =      2
+
+[jhipp@test-sbox3 ~]$ ./cache_manage.sh --stop
+
+Stopping Instances Now
+
+All instances stopped successfully
+
+[jhipp@test-sbox3 ~]$ ./cache_manage.sh --status
+
+--------------------
+Status of Instances
+--------------------
+
+Configuration 'TEST002'   (default)
+        directory: /intersystems/TEST002/sys
+        versionid: 2017.2.1.801.3.18583
+        conf file: cache.cpf  (SuperServer port = 1972, WebServer = 57772)
+        status:    down, last used Tue Jul 30 16:46:15 2019
+
+Configuration 'TEST003'
+        directory: /intersystems/TEST003/sys
+        versionid: 2017.2.1.801.3.18514
+        conf file: cache.cpf  (SuperServer port = 1973, WebServer = 57773)
+        status:    down, last used Tue Jul 30 16:46:19 2019
+
+[jhipp@test-sbox3 ~]$ ./cache_manage.sh --start
+
+Starting Instances Now
+
+Instances started successfully
+
+[jhipp@test-sbox3 ~]$ ./cache_manage.sh --status
+
+--------------------
+Status of Instances
+--------------------
+
+Configuration 'TEST002'   (default)
+        directory: /intersystems/TEST002/sys
+        versionid: 2017.2.1.801.3.18583
+        conf file: cache.cpf  (SuperServer port = 1972, WebServer = 57772)
+        status:    running, since Tue Jul 30 16:46:28 2019
+        state:     ok
+
+Configuration 'TEST003'
+        directory: /intersystems/TEST003/sys
+        versionid: 2017.2.1.801.3.18514
+        conf file: cache.cpf  (SuperServer port = 1973, WebServer = 57773)
+        status:    running, since Tue Jul 30 16:46:30 2019
+        state:     ok
+
+[jhipp@test-sbox3 ~]$ ./cache_manage.sh --show-log
+
+Parsing out cconsole.log for Severity Messages Greater Than 1
+
+Log Messages for TEST002
+
+02/14/19-01:57:43:373 (8328) 2 CACHE JOURNALING SYSTEM: Write to journal file has failed
+02/14/19-01:57:43:377 (8328) 2 JRNCREATE in jrnswitch() - Error 28=(No space left on device)
+02/14/19-04:10:08:092 (8328) 2 CACHE JOURNALING SYSTEM: Write to journal file has failed
+02/14/19-04:10:08:097 (8328) 2 JRNCREATE in jrnswitch() - Error 28=(No space left on device)
+02/14/19-10:35:50:202 (8500) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 87, 99, 99 (Max value is 85).
+02/14/19-11:10:21:160 (8328) 2 CACHE JOURNALING SYSTEM: Write to journal file has failed
+02/14/19-11:10:21:187 (8328) 2 JRNCREATE in jrnswitch() - Error 28=(No space left on device)
+07/11/19-15:57:26:890 (19135) 2 Previous system shutdown was abnormal, system forced down or crashed
+07/11/19-15:57:26:890 (19135) 2 System appears to have failed over from node gov-tic-dev-hsrm
+07/11/19-15:57:37:968 (19135) 2 [JOURNAL RESTORE] Failed to mount database /intersystems/mr21a2/T2018_20190221_0456_R21_USXX_ADHOC2_B52/
+07/12/19-02:03:45:311 (19304) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 99, 99, 97 (Max value is 85).
+07/13/19-02:02:56:580 (19304) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 93, 99, 99 (Max value is 85).
+07/14/19-02:03:08:005 (19304) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 99, 99, 99 (Max value is 85).
+07/15/19-02:03:19:440 (19304) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 99, 99, 99 (Max value is 85).
+07/25/19-12:59:34:138 (5903) 2 Previous system shutdown was abnormal, system forced down or crashed
+07/26/19-02:03:05:103 (7378) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 99, 99, 99 (Max value is 85).
+07/27/19-02:03:14:103 (7378) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 99, 99, 99 (Max value is 85).
+07/28/19-02:03:25:662 (29397) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 99, 99, 99 (Max value is 85).
+07/29/19-02:03:34:766 (29397) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 99, 99, 99 (Max value is 85).
+07/30/19-02:03:43:728 (29397) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 99, 99, 92 (Max value is 85).
+
+Log Messages for TEST003
+
+01/29/19-10:46:19:725 (10661) 2 Database /intersystems/TEST003/db/data/ is locked from gov-tic-testqa-hsrm
+01/29/19-10:47:55:850 (10661) 2 Database /intersystems/TEST003/db/appsys/ is locked from gov-tic-testqa-hsrm
+07/25/19-12:59:37:938 (6433) 2 System appears to have failed over from node gov-tic-dev-hsrm
+07/25/19-12:59:38:369 (6445) 2 Preserving journal files /intersystems/TEST003/sys/mgr/journal/20190130.001 and later for journal recovery and transaction rollback
+07/25/19-12:59:38:510 (6433) 2 Database /intersystems/TEST003/db/data/ is locked from gov-tic-testqa-hsrm
+07/25/19-13:06:02:709 (7745) 2 Database /intersystems/TEST003/db/data/ is locked from gov-tic-testqa-hsrm
+07/26/19-01:00:01:127 (12391) 2 Database /intersystems/TEST003/db/CCRAINT/ is locked from gov-tic-testqa-hsrm
+07/26/19-01:00:01:187 (12391) 2 Database /intersystems/TEST003/db/HMF/HMFUSRMGATEWAY_HSVA/ is locked from gov-tic-testqa-hsrm
+07/26/19-01:00:01:215 (12391) 2 Database /intersystems/TEST003/db/HMF/HMFUSRMROUTER/ is locked from gov-tic-testqa-hsrm
+07/26/19-02:03:06:815 (7757) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 99, 99, 99 (Max value is 85).
+07/27/19-02:03:14:089 (7757) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 99, 99, 99 (Max value is 85).
+07/27/19-22:48:54:201 (28713) 2 Database /intersystems/TEST003/db/data/ is locked from gov-tic-testqa-hsrm
+07/27/19-22:50:27:948 (29763) 2 Database /intersystems/TEST003/db/data/ is locked from gov-tic-testqa-hsrm
+07/28/19-01:00:00:161 (4458) 2 Database /intersystems/TEST003/db/CCRAINT/ is locked from gov-tic-testqa-hsrm
+07/28/19-01:00:00:189 (4458) 2 Database /intersystems/TEST003/db/HMF/HMFUSRMGATEWAY_HSVA/ is locked from gov-tic-testqa-hsrm
+07/28/19-01:00:00:194 (4458) 2 Database /intersystems/TEST003/db/HMF/HMFUSRMROUTER/ is locked from gov-tic-testqa-hsrm
+07/28/19-02:03:29:641 (29774) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 99, 99, 99 (Max value is 85).
+07/29/19-02:03:37:171 (29774) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 99, 99, 99 (Max value is 85).
+07/30/19-02:03:44:394 (29774) 2 [SYSTEM MONITOR] CPUusage Alert: CPUusage = 99, 99, 90 (Max value is 85).
+07/30/19-16:46:31:032 (15417) 2 Database /intersystems/TEST003/db/data/ is locked from gov-tic-testqa-hsrm
+
+[jhipp@test-sbox3 ~]$ ./cache_manage.sh --version
+
+Script Version = 1.00
 
 
