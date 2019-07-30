@@ -42,6 +42,32 @@ Configuration 'TEST001'   (default)
 [jhipp@test-sbox1 ~]$ ./cache_manage.sh
 
  = Not Valid Input
+ 
+ ----------------------
+cache_manage.sh
+----------------------
+
+Usage:
+./cache_manage.sh <command(s)>, ...
+
+Commands:
+--add-user <username> <role> = Add an OS user account to Cache
+--auth-enabled = Print out authentication settings for instance(s)
+--del-user <username> = Delete an OS user account from Cache
+--help = Show help notes for this script
+--license = Show license usage and info
+--restart = Restart all instances on this machine
+--show-log = Show log warnings and errors
+--start = Start all instances on this machine
+--status = Show status of all instances on this machine
+--stop = Stop all instances on this machine
+--user-exists = Show if OS user account exists in Cache
+--version = Print out script version
+
+Examples:
+./cache_manage.sh --start
+./cache_manage.sh --status
+./cache_manage.sh --add-user jdoe %All
 
 [jhipp@test-sbox1 ~]$ ./cache_manage.sh --help
 ----------------------
