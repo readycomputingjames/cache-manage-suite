@@ -68,12 +68,12 @@ add_user()
 
             output=`echo -e "w ##class(Security.Users).Exists(\"$INPUT_COMMAND2\")\nh" |/usr/bin/csession $i -U %SYS |awk NR==5`
 
-         if [ $output -eq 0 ]
-         then
-            echo -e "s x=##Class(Security.Users).Create(\"$INPUT_COMMAND2\",\"$INPUT_COMMAND3\",\"CHANGEPASSWORDHERE\",\"$INPUT_COMMAND2\",\"%SYS\")\nh" |/usr/bin/csession $i -U %SYS > /dev/null 2>&1
-         else
-            echo "Username $INPUT_COMMAND2 Already Exists in $i"
-         fi
+            if [ $output -eq 0 ]
+            then
+               echo -e "s x=##Class(Security.Users).Create(\"$INPUT_COMMAND2\",\"$INPUT_COMMAND3\",\"CHANGEPASSWORDHERE\",\"$INPUT_COMMAND2\",\"%SYS\")\nh" |/usr/bin/csession $i -U %SYS > /dev/null 2>&1
+            else
+               echo "Username $INPUT_COMMAND2 Already Exists in $i"
+            fi
 
          done
 
