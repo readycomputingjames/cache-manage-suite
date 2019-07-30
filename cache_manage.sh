@@ -77,7 +77,6 @@ add_user()
 
          done
 
-         echo ""
          echo "Verifying Usernames in Cache..."
 
          cache_user_exists
@@ -213,7 +212,6 @@ del_user()
 
          done
 
-         echo ""
          echo "Verifying Updated Usernames in Cache..."
 
          cache_user_exists
