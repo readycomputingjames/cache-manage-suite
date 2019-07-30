@@ -90,10 +90,7 @@ auth_enabled()
    
    for i in ${instances[@]};
    do
-      sudo csession $i -U %SYS << EOF
-      w \#\#class(Security.System).AutheEnabledGetStored("SYSTEM")
-      h
-      EOF 
+      echo -e "w ##class(Security.System).AutheEnabledGetStored(\"SYSTEM\")\nh" |csession $i
    done
    
    echo ""
