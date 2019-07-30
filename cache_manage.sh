@@ -480,7 +480,7 @@ main ()
             auth_enabled
             ;;
          --del-user)
-            echo "Del User Goes Here"
+            del_user
             ;;
          --help)
             help_text
