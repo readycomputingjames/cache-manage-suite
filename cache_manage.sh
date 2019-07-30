@@ -82,8 +82,19 @@ auth_enabled()
 
    ### Print Out Enabled Authentication Settings for Instances ###
    
-   # %SYS>w ##class(Security.System).AutheEnabledGetStored("SYSTEM")
-   # Function Code Goes Here
+   # Load Instances into an Array, in case we have Multiple
+   instances=()
+   while IFS= read -r line; do
+      instances+=( "$line" )
+   done < <( sudo ccontrol list |grep Configuration |awk '{ print $2 }' |tr -d "'" )
+   
+   for i in ${instances[@]};
+   do
+      sudo csession $i -U %SYS << EOF
+      w \#\#class(Security.System).AutheEnabledGetStored("SYSTEM")
+      h
+      EOF 
+   done
    
    echo ""
    echo "--------------------"
