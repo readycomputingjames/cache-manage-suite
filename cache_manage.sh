@@ -257,12 +257,10 @@ is_cache()
 
    ### Check if Cache is Installed ###
 
-   if [ "`/usr/bin/ccontrol list`" ]
+   if [ -e "/usr/bin/ccontrol" ]
    then
       return 0
    else
-      echo "Cache is not Installed, exiting..."
-      echo ""
       return 1
    fi
 
