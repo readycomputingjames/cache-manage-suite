@@ -548,6 +548,7 @@ main ()
             echo ""
             echo "$INPUT_COMMAND1 = Not Valid Input"
             echo ""
+            help_text
       esac
 
    else
