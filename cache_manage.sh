@@ -175,7 +175,47 @@ cache_user_exists()
 del_user()
 {
 
-   echo "placeholder"
+   if [ -z "$INPUT_COMMAND3" ]
+   then
+      echo ""
+      echo "No Username Input - Please Run Again with a Username Specified"
+      echo ""
+
+   else
+      echo ""
+      echo "--------------------"
+      echo "Running Delete-User for $INPUT_COMMAND2"
+      echo ""
+      echo "If Username is not in Cache, it will be Skipped..."
+      echo "--------------------"
+      echo ""
+      
+      # Load Instances into an Array, in case we have Multiple
+      instances=()
+      while IFS= read -r line; do
+         instances+=( "$line" )
+      done < <( /usr/bin/ccontrol list |grep Configuration |awk '{ print $2 }' |tr -d "'" )
+   
+      for i in ${instances[@]};
+      do
+      
+         output=`echo -e "w ##class(Security.Users).Exists(\"$INPUT_COMMAND2\")\nh" |/usr/bin/csession $i -U %SYS |awk NR==5`
+
+         if [ $output -eq 1 ]
+         then
+            echo -e "s x=##Class(Security.Users).Delete(\"$INPUT_COMMAND2\")\nh" |/usr/bin/csession $i -U %SYS > /dev/null 2>&1
+         else
+            echo "Username $INPUT_COMMAND2 Does Not Exist in $i"
+         fi
+
+         done
+         
+         echo ""
+         echo "Checking for Username in Cache..."
+
+         cache_user_exists
+
+   fi
 
 }
 
