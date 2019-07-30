@@ -43,7 +43,7 @@ Configuration 'TEST001'   (default)
 
  = Not Valid Input
  
- ----------------------
+----------------------
 cache_manage.sh
 ----------------------
 
@@ -143,7 +143,6 @@ Running Add-User for jenkins
 
 If the User Already Exists, it will be Skipped...
 --------------------
-
 
 Verifying Usernames in Cache...
 
