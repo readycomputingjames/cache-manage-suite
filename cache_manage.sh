@@ -7,7 +7,8 @@
 # Main Bash script for Cache Manage Suite of Scripts
 # This is a combo of Basic Functions and Tasks
 #
-# We will already assume that Cache is installed on these Systems for now
+# This script assumes that the user running the script has OS
+# Auth enabled into Cache instance(s) and is %All role
 #
 # Our system OS use-case will be RHEL 7+ (or CentOS 7+)
 #
@@ -22,6 +23,7 @@
 #
 ### CHANGE LOG ###
 # 20190729 = Added Auth-Enabled Flag
+# 20190730 = Changed csession commands from root to script run user
 #
 #
 #########################################################################
@@ -52,7 +54,7 @@ add_user()
 
          for i in ${instances[@]};
          do
-            sudo su - root -c "echo -e 's x=##Class(Security.Users).Create(\"$INPUT_COMMAND2\",\"$INPUT_COMMAND3\",\"CHANGEPASSWORDHERE\",\"$INPUT_COMMAND2\",\"%SYS\")\nh' |csession $i -U %SYS > /dev/null 2>&1"
+            "echo -e 's x=##Class(Security.Users).Create(\"$INPUT_COMMAND2\",\"$INPUT_COMMAND3\",\"CHANGEPASSWORDHERE\",\"$INPUT_COMMAND2\",\"%SYS\")\nh' |csession $i -U %SYS > /dev/null 2>&1"
          done
 
          echo "Checking if Add was Successful..."
@@ -90,7 +92,7 @@ auth_enabled()
    
    for i in ${instances[@]};
    do
-      echo -e "w ##class(Security.System).AutheEnabledGetStored(\"SYSTEM\")\nh" |csession $i
+      echo -e "w ##class(Security.System).AutheEnabledGetStored(\"SYSTEM\")\nh" |csession $i -U %SYS
    done
    
    echo ""
@@ -140,7 +142,7 @@ cache_user_exists()
 
       for i in ${instances[@]};
       do
-         output=`sudo su - root -c "echo -e 'w ##class(Security.Users).Exists(\"$INPUT_COMMAND2\")\nh' |csession $i -U %SYS |awk NR==5"`
+         output=`"echo -e 'w ##class(Security.Users).Exists(\"$INPUT_COMMAND2\")\nh' |csession $i -U %SYS |awk NR==5"`
          if [ $output -eq  1 ]
          then
             echo ""
@@ -255,7 +257,7 @@ license_usage()
       echo ""
       echo "License Usage for $i:"
       echo ""
-      sudo csession $i "##class(%SYSTEM.License).ShowSummary()"
+      csession $i "##class(%SYSTEM.License).ShowSummary()"
       echo ""
    done
 
@@ -296,7 +298,7 @@ restart_instances()
 
    for i in ${instances[@]};
    do
-      sudo ccontrol stop $i quietly restart > /dev/null 2>&1
+      ccontrol stop $i quietly restart > /dev/null 2>&1
    done
 
    # Verify
@@ -330,7 +332,7 @@ start_instances()
 
    for i in ${instances[@]};
    do
-      sudo ccontrol start $i > /dev/null 2>&1
+      ccontrol start $i > /dev/null 2>&1
    done
 
    # Verify
@@ -350,7 +352,7 @@ status_text()
 {
 
    # Print List of Instances
-   sudo ccontrol list
+   ccontrol list
 
 }
 
@@ -365,7 +367,7 @@ stop_instances()
 
    for i in ${instances[@]};
    do
-      sudo ccontrol stop $i quietly > /dev/null 2>&1
+      ccontrol stop $i quietly > /dev/null 2>&1
    done
 
   # Verify
