@@ -175,7 +175,7 @@ cache_user_exists()
 del_user()
 {
 
-   if [ -z "$INPUT_COMMAND3" ]
+   if [ -z "$INPUT_COMMAND2" ]
    then
       echo ""
       echo "No Username Input - Please Run Again with a Username Specified"
