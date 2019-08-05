@@ -22,11 +22,11 @@
 #
 #
 ### CHANGE LOG ###
+#
 # 20190727 = Changed csession commands from root to script run user
 # 20190729 = Added Auth-Enabled Flag
 # 20190730 = Changed 'sudo ccontrol...' to '/usr/bin/ccontrol...'
 # 20190730 = Changed 'csession...' to '/usr/bin/csession...'
-#
 #
 #########################################################################
 
