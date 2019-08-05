@@ -73,6 +73,7 @@ add_user()
                echo -e "s x=##Class(Security.Users).Create(\"$INPUT_COMMAND2\",\"$INPUT_COMMAND3\",\"CHANGEPASSWORDHERE\",\"$INPUT_COMMAND2\")\nh" |/usr/bin/csession $i -U %SYS > /dev/null 2>&1
             else
                echo "Username $INPUT_COMMAND2 Already Exists in $i"
+               echo ""
             fi
 
          done
@@ -208,6 +209,7 @@ del_user()
             echo -e "s x=##Class(Security.Users).Delete(\"$INPUT_COMMAND2\")\nh" |/usr/bin/csession $i -U %SYS > /dev/null 2>&1
          else
             echo "Username $INPUT_COMMAND2 Does Not Exist in $i"
+            echo ""
          fi
 
          done
