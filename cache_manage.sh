@@ -231,7 +231,7 @@ help_text()
    echo "----------------------"
    echo ""
    echo "Usage:"
-   echo "./cache_manage.sh <command(s)>, ..."
+   echo "cache_manage.sh <command(s)>, ..."
    echo ""
    echo "Commands:"
    echo "--add-user <username> <role> = Add an OS user account to Cache"
