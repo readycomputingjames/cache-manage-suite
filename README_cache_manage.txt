@@ -17,6 +17,8 @@ Our system OS use-case will be RHEL 7+ (or CentOS 7+)
 # 20190729 = Added Auth-Enabled Flag
 # 20190730 = Changed 'sudo ccontrol...' to '/usr/bin/ccontrol...'
 # 20190730 = Changed 'csession...' to '/usr/bin/csession...'
+# 20190805 = Added Show-Namespaces  Flag
+# 20190805 = Added Show-App-Errors Flag
 
 
 Script Usage Text
@@ -46,9 +48,13 @@ Commands:
 
 --license = Show license usage and info
 
+--list-namespaces = Show list of namespaces in a database
+
 --restart = Restart all instances on this machine
 
---show-log = Show log warnings and errors
+--show-app-errors <namespace> = List application errors for a namespace
+
+--show-log = Show console log warnings and errors
 
 --start = Start all instances on this machine
 
