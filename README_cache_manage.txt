@@ -17,7 +17,7 @@ Our system OS use-case will be RHEL 7+ (or CentOS 7+)
 # 20190729 = Added Auth-Enabled Flag
 # 20190730 = Changed 'sudo ccontrol...' to '/usr/bin/ccontrol...'
 # 20190730 = Changed 'csession...' to '/usr/bin/csession...'
-# 20190805 = Added Show-Namespaces  Flag
+# 20190805 = Added List-Namespaces  Flag
 # 20190805 = Added Show-App-Errors Flag
 
 
