@@ -338,7 +338,7 @@ list_namespaces()
       echo "------------------------------"
       echo "Listing Namespaces for $i:"
       echo ""
-      echo -e "d ##class(%SYS.Namespace).ListAll(.result)\nzw result\nh" |/usr/bin/csession $i -U %SYS
+      echo -e "d ##class(%SYS.Namespace).ListAll(.result)\nzw result\nh" |/usr/bin/csession $i
       echo ""
    done
 
