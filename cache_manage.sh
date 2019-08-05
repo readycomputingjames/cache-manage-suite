@@ -27,6 +27,8 @@
 # 20190729 = Added Auth-Enabled Flag
 # 20190730 = Changed 'sudo ccontrol...' to '/usr/bin/ccontrol...'
 # 20190730 = Changed 'csession...' to '/usr/bin/csession...'
+# 20190805 = Added Show-Namespaces  Flag
+# 20190805 = Added Show-App-Errors Flag
 #
 #########################################################################
 
@@ -239,8 +241,10 @@ help_text()
    echo "--del-user <username> = Delete an OS user account from Cache"
    echo "--help = Show help notes for this script"
    echo "--license = Show license usage and info"
+   echo "--list-namespaces = Show list of namespaces in database"
    echo "--restart = Restart all instances on this machine"
-   echo "--show-log = Show log warnings and errors"
+   echo "--show-app-errors <namespace> = List application errors for a namespace"
+   echo "--show-log = Show console log warnings and errors"
    echo "--start = Start all instances on this machine"
    echo "--status = Show status of all instances on this machine"
    echo "--stop = Stop all instances on this machine"
@@ -317,6 +321,29 @@ license_usage()
 
 }
 
+list_namespaces()
+{
+
+   # Print list of Namespaces for a Database
+   
+   # Load Instances into an Array, in case we have Multiple
+   instances=()
+   while IFS= read -r line; do
+      instances+=( "$line" )
+   done < <( /usr/bin/ccontrol list |grep Configuration |awk '{ print $2 }' |tr -d "'" )
+
+   for i in ${instances[@]};
+   do
+      echo ""
+      echo "------------------------------"
+      echo "Listing Namespaces for $i:"
+      echo ""
+      echo -e "d ##class(%SYS.Namespace).ListAll(.result)\nzw result\nh" |/usr/bin/csession $i -U %SYS
+      echo ""
+   done
+
+}
+
 os_user_exists()
 {
 
@@ -366,6 +393,60 @@ restart_instances()
       echo "Possible error during restart, one or more instances do now show running"
       echo ""
       return 1
+   fi
+
+}
+
+show_app_errors()
+{
+
+   # Show Application Errors for a Namespace
+   
+   echo ""
+   echo "Fetching Application Errors for Namespace"
+   echo ""
+   echo "(If you did not provide a namespace, it will be list from default User Namespace)"
+   echo ""
+   
+   if [ -z "$INPUT_COMMAND2" ]
+   then
+      echo "Fetching App Error Log for Default User Namespace"
+      
+      # Load Instances into an Array, in case we have Multiple
+      instances=()
+      while IFS= read -r line; do
+         instances+=( "$line" )
+      done < <( /usr/bin/ccontrol list |grep Configuration |awk '{ print $2 }' |tr -d "'" )
+
+      for i in ${instances[@]};
+      do
+         echo ""
+         echo "------------------------------"
+         echo "Listing Default App Error Log for $i:"
+         echo ""
+         /usr/bin/csession $i "^%ERN"
+         echo ""
+      done
+
+   else
+      echo "Fetching App Error Log for Namespace $INPUT_COMMAND2"
+      
+      # Load Instances into an Array, in case we have Multiple
+      instances=()
+      while IFS= read -r line; do
+         instances+=( "$line" )
+      done < <( /usr/bin/ccontrol list |grep Configuration |awk '{ print $2 }' |tr -d "'" )
+
+      for i in ${instances[@]};
+      do
+         echo ""
+         echo "------------------------------"
+         echo "Listing App Error in $i for Namespace $INPUT_COMMAND2:"
+         echo ""
+         /usr/bin/csession $i -U $INPUT_COMMAND2 "^%ERN"
+         echo ""
+      done
+
    fi
 
 }
@@ -509,11 +590,17 @@ main ()
          --license)
             license_usage
          ;;
+         --list-namespaces)
+            list_namespaces
+         ;;
          --restart)
             echo ""
             echo "Restarting Instances Now"
             echo ""
             restart_instances
+         ;;
+         --show-app-errors)
+            show_app_errors
          ;;
          --show-log)
             show_log
