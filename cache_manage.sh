@@ -23,12 +23,19 @@
 #
 ### CHANGE LOG ###
 #
+# [Version 1.00]
+#
 # 20190727 = Changed csession commands from root to script run user
 # 20190729 = Added Auth-Enabled Flag
 # 20190730 = Changed 'sudo ccontrol...' to '/usr/bin/ccontrol...'
 # 20190730 = Changed 'csession...' to '/usr/bin/csession...'
+#
+# [Version 1.50]
+#
 # 20190805 = Added List-Namespaces  Flag
 # 20190805 = Added Show-App-Errors Flag
+# 20190806 = Added Journal-Status Flag
+# 20190806 = Added Mirror-Status Flag
 #
 #########################################################################
 
@@ -240,8 +247,10 @@ help_text()
    echo "--auth-enabled = Print out authentication settings for instance(s)"
    echo "--del-user <username> = Delete an OS user account from Cache"
    echo "--help = Show help notes for this script"
+   echo "--journal-status = Show current status for journal"
    echo "--license = Show license usage and info"
    echo "--list-namespaces = Show list of namespaces in database"
+   echo "--mirror-status = Show current mirror status"
    echo "--restart = Restart all instances on this machine"
    echo "--show-app-errors <namespace> = List application errors for a namespace"
    echo "--show-log = Show console log warnings and errors"
@@ -299,6 +308,29 @@ is_up()
 
 }
 
+journal_status()
+{
+
+   # Display Current Journal Status
+
+   # Load Instances into an Array, in case we have Multiple
+   instances=()
+   while IFS= read -r line; do
+      instances+=( "$line" )
+   done < <( /usr/bin/ccontrol list |grep Configuration |awk '{ print $2 }' |tr -d "'" )
+
+   for i in ${instances[@]};
+   do
+      echo ""
+      echo "------------------------------"
+      echo "Current Journal Status for $i:"
+      echo ""
+      /usr/bin/csession $i -U %SYS "Status^JOURNAL"
+      echo ""
+   done
+
+}
+
 license_usage()
 {
 
@@ -343,6 +375,29 @@ list_namespaces()
    done
 
    echo ""
+
+}
+
+mirror_status()
+{
+
+   # Display Current Mirror Status
+
+   # Load Instances into an Array, in case we have Multiple
+   instances=()
+   while IFS= read -r line; do
+      instances+=( "$line" )
+   done < <( /usr/bin/ccontrol list |grep Configuration |awk '{ print $2 }' |tr -d "'" )
+
+   for i in ${instances[@]};
+   do
+      echo ""
+      echo "------------------------------"
+      echo "Current Mirror Status for $i:"
+      echo ""
+      echo -e "w ##class(%SYSTEM.Mirror).GetMemberStatus()\nh" |/usr/bin/csession $i -U %SYS
+      echo ""
+   done
 
 }
 
@@ -589,11 +644,17 @@ main ()
          --help)
             help_text
          ;;
+         --journal-status)
+            journal_status
+         ;;
          --license)
             license_usage
          ;;
          --list-namespaces)
             list_namespaces
+         ;;
+         --mirror-status)
+            mirror_status
          ;;
          --restart)
             echo ""
