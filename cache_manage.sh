@@ -325,7 +325,7 @@ list_namespaces()
 {
 
    # Print list of Namespaces for a Database
-   
+
    # Load Instances into an Array, in case we have Multiple
    instances=()
    while IFS= read -r line; do
@@ -338,9 +338,11 @@ list_namespaces()
       echo "------------------------------"
       echo "Listing Namespaces for $i:"
       echo ""
-      echo -e "d ##class(%SYS.Namespace).ListAll(.result)\nzw result\nh" |/usr/bin/csession $i
+      echo -e "d ##class(%SYS.Namespace).ListAll(.result)\nzw result\nh" |/usr/bin/csession $i |egrep "Node|result"
       echo ""
    done
+
+   echo ""
 
 }
 
@@ -401,17 +403,17 @@ show_app_errors()
 {
 
    # Show Application Errors for a Namespace
-   
+
    echo ""
    echo "Fetching Application Errors for Namespace"
    echo ""
    echo "(If you did not provide a namespace, it will be list from default User Namespace)"
    echo ""
-   
+
    if [ -z "$INPUT_COMMAND2" ]
    then
       echo "Fetching App Error Log for Default User Namespace"
-      
+
       # Load Instances into an Array, in case we have Multiple
       instances=()
       while IFS= read -r line; do
@@ -430,7 +432,7 @@ show_app_errors()
 
    else
       echo "Fetching App Error Log for Namespace $INPUT_COMMAND2"
-      
+
       # Load Instances into an Array, in case we have Multiple
       instances=()
       while IFS= read -r line; do
@@ -650,4 +652,5 @@ main ()
 }
 
 main
+
 
