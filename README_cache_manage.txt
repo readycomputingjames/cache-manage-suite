@@ -1,4 +1,4 @@
-README File = Last Updated 20190730
+README File = Last Updated 20190807
 
 James Hipp
 System Support Engineer
@@ -13,13 +13,21 @@ Auth enabled into Cache instance(s) and is %All role
 Our system OS use-case will be RHEL 7+ (or CentOS 7+)
 
 ### CHANGE LOG ###
+#
+# [Version 1.00]
+#
 # 20190727 = Changed csession commands from root to script run user
 # 20190729 = Added Auth-Enabled Flag
 # 20190730 = Changed 'sudo ccontrol...' to '/usr/bin/ccontrol...'
 # 20190730 = Changed 'csession...' to '/usr/bin/csession...'
+#
+# [Version 1.50]
+#
 # 20190805 = Added List-Namespaces  Flag
 # 20190805 = Added Show-App-Errors Flag
-
+# 20190806 = Added Journal-Status Flag
+# 20190806 = Added Mirror-Status Flag
+#
 
 Script Usage Text
 
