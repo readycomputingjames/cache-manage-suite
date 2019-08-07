@@ -691,22 +691,22 @@ main ()
       case $INPUT_COMMAND1 in
          --add-user)
             add_user
-            ;;
+         ;;
          --auth-enabled)
             auth_enabled
-            ;;
+         ;;
          --cache-info)
             cache_info
-            ;;
+         ;;
          --del-user)
             del_user
-            ;;
+         ;;
          --disable-user)
             disable_user
-            ;;
+         ;;
          --enable-user)
             enable_user
-            ;;
+         ;;
          --help)
             help_text
          ;;
