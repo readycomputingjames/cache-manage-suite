@@ -39,7 +39,7 @@
 #
 #########################################################################
 
-VERSION="1.00"
+VERSION="1.50"
 
 INPUT_COMMAND1=$1
 INPUT_COMMAND2=$2
@@ -145,6 +145,47 @@ auth_enabled()
 
 }
 
+cache_info()
+{
+
+   # Display Info About Cache
+
+   # Load Instances into an Array, in case we have Multiple
+   instances=()
+   while IFS= read -r line; do
+      instances+=( "$line" )
+   done < <( /usr/bin/ccontrol list |grep Configuration |awk '{ print $2 }' |tr -d "'" )
+
+   for i in ${instances[@]};
+   do
+      echo ""
+      echo "------------------------------"
+      echo "Cache Info for $i:"
+      echo ""
+      echo -e "w ##class(%SYSTEM.Version).GetVersion()\nh" |/usr/bin/csession $i -U %SYS |awk NR==5
+      echo ""
+
+      ### ISC Product: Cache = 1, Ensemble = 2, HealthShare = 3
+      product=`echo -e "w ##class(%SYSTEM.Version).GetISCProduct()\nh" |/usr/bin/csession $i -U %SYS |awk NR==5`
+      case $product in
+         1)
+            echo "Installed ISC Product = Cache"
+            ;;
+         2)
+            echo "Installed ISC Product = Ensemble"
+         ;;
+         3)
+            echo "Installed ISC Product = HealthShare"
+         ;;
+         *)
+            echo "Unable to Fetch Installed ISC Product Number"
+      esac
+
+      echo ""
+
+   done
+
+}
 
 cache_user_exists()
 {
@@ -245,6 +286,7 @@ help_text()
    echo "Commands:"
    echo "--add-user <username> <role> = Add an OS user account to Cache"
    echo "--auth-enabled = Print out authentication settings for instance(s)"
+   echo "--cache-info = Display version and ISC product information for Cache"
    echo "--del-user <username> = Delete an OS user account from Cache"
    echo "--help = Show help notes for this script"
    echo "--journal-status = Show current status for journal"
@@ -327,7 +369,10 @@ journal_status()
       echo ""
       /usr/bin/csession $i -U %SYS "Status^JOURNAL"
       echo ""
+      echo ""
    done
+
+   echo ""
 
 }
 
@@ -395,9 +440,11 @@ mirror_status()
       echo "------------------------------"
       echo "Current Mirror Status for $i:"
       echo ""
-      echo -e "w ##class(%SYSTEM.Mirror).GetMemberStatus()\nh" |/usr/bin/csession $i -U %SYS
+      echo -e "w ##class(%SYSTEM.Mirror).GetMemberStatus()\nh" |/usr/bin/csession $i -U %SYS |awk NR==5
       echo ""
    done
+
+   echo ""
 
 }
 
@@ -637,6 +684,9 @@ main ()
             ;;
          --auth-enabled)
             auth_enabled
+            ;;
+         --cache-info)
+            cache_info
             ;;
          --del-user)
             del_user
