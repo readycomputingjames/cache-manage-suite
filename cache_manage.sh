@@ -23,23 +23,14 @@
 #
 ### CHANGE LOG ###
 #
-# [Version 1.00]
+# [Version 2.00]
 #
-# 20190727 = Changed csession commands from root to script run user
-# 20190729 = Added Auth-Enabled Flag
-# 20190730 = Changed 'sudo ccontrol...' to '/usr/bin/ccontrol...'
-# 20190730 = Changed 'csession...' to '/usr/bin/csession...'
-#
-# [Version 1.50]
-#
-# 20190805 = Added List-Namespaces  Flag
-# 20190805 = Added Show-App-Errors Flag
-# 20190806 = Added Journal-Status Flag
-# 20190806 = Added Mirror-Status Flag
+# 20190807 = Add Enable-User and Disable-User Functions
+# 20190807 = Add User Enabled/Disabled Text to User-Exists Flag
 #
 #########################################################################
 
-VERSION="1.50"
+VERSION="2.00"
 
 INPUT_COMMAND1=$1
 INPUT_COMMAND2=$2
@@ -272,6 +263,20 @@ del_user()
 
 }
 
+disable_user()
+{
+
+   echo "placeholder"
+   
+}
+
+enable_user()
+{
+
+   echo "placeholder"
+
+}
+
 help_text()
 {
 
@@ -288,6 +293,8 @@ help_text()
    echo "--auth-enabled = Print out authentication settings for instance(s)"
    echo "--cache-info = Display version and ISC product information for Cache"
    echo "--del-user <username> = Delete an OS user account from Cache"
+   echo "--disable-user <username> = Disables a user account in Cache"
+   echo "--enable-user <username> = Enables a user account in Cache"
    echo "--help = Show help notes for this script"
    echo "--journal-status = Show current status for journal"
    echo "--license = Show license usage and info"
@@ -647,6 +654,7 @@ stop_instances()
 user_exists()
 {
 
+   # For Main Case Function, and also if User is Enabled/Disabled
 
    if [ -z "$INPUT_COMMAND2" ]
    then
@@ -660,6 +668,8 @@ user_exists()
          echo ""
          echo "$INPUT_COMMAND2 User Account does Exist in Cache"
          echo ""
+         
+         ### Check if User is Enabled/Disabled ###
 
       else
          echo ""
@@ -690,6 +700,12 @@ main ()
             ;;
          --del-user)
             del_user
+            ;;
+         --disable-user)
+            disable_user
+            ;;
+         --enable-user)
+            enable_user
             ;;
          --help)
             help_text
@@ -739,7 +755,7 @@ main ()
             stop_instances
          ;;
          --user-exists)
-            cache_user_exists
+            user_exists
          ;;
          --version)
             echo ""
