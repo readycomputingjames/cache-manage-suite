@@ -52,6 +52,10 @@ Commands:
 
 --del-user <username> = Delete an OS user account from Cache
 
+--disable-user <username> = Disable a user account in Cache
+
+--enable-user <username> = Enable a user account in Cache
+
 --help = Show help notes for this script
 
 --license = Show license usage and info
@@ -70,7 +74,7 @@ Commands:
 
 --stop = Stop all instances on this machine
 
---user-exists = Show if OS user account exists in Cache
+--user-exists = Show if OS user account exists in Cache and is enabled
 
 --version = Print out script version
 
