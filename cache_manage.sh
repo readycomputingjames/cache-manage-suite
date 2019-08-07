@@ -306,7 +306,7 @@ help_text()
    echo "--start = Start all instances on this machine"
    echo "--status = Show status of all instances on this machine"
    echo "--stop = Stop all instances on this machine"
-   echo "--user-exists = Show if OS user account exists in Cache"
+   echo "--user-exists = Show if OS user account exists in Cache and is enabled"
    echo "--version = Print out script version"
    echo ""
    echo "Examples:"
