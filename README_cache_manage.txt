@@ -47,35 +47,23 @@ Usage:
 Commands:
 
 --add-user <username> <role> = Add an OS user account to Cache
-
 --auth-enabled = Print out authentication settings for instance(s)
-
+--cache-info = Display version and ISC product information for Cache
 --del-user <username> = Delete an OS user account from Cache
-
---disable-user <username> = Disable a user account in Cache
-
---enable-user <username> = Enable a user account in Cache
-
+--disable-user <username> = Disables a user account in Cache
+--enable-user <username> = Enables a user account in Cache
 --help = Show help notes for this script
-
+--journal-status = Show current status for journal
 --license = Show license usage and info
-
---list-namespaces = Show list of namespaces in a database
-
+--list-namespaces = Show list of namespaces in database
+--mirror-status = Show current mirror status
 --restart = Restart all instances on this machine
-
 --show-app-errors <namespace> = List application errors for a namespace
-
 --show-log = Show console log warnings and errors
-
 --start = Start all instances on this machine
-
 --status = Show status of all instances on this machine
-
 --stop = Stop all instances on this machine
-
 --user-exists = Show if OS user account exists in Cache and is enabled
-
 --version = Print out script version
 
 
